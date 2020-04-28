@@ -7,10 +7,10 @@ import java.util.*;
 
 public class Parent extends User {
 
-    private List<Child> children;
+    private final List<Child> children;
 
-    public Parent(String firstName, String lastName, String pseudo, String password) {
-        super(firstName, lastName, pseudo, password);
+    public Parent(String firstName, String lastName, String pseudo, String password, String phone) {
+        super(firstName, lastName, pseudo, password, phone);
         this.children = new ArrayList<Child>();
     }
 
