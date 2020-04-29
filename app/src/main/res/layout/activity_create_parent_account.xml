@@ -16,6 +16,15 @@
       android:textSize="30sp"
       android:textStyle="bold"/>
 
+  <TextView
+      android:text="Informations manquantes"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/missInfoTxt"
+      android:visibility="gone"
+      android:textColor="#FF0000"
+      android:textSize="24sp"/>
+
   <EditText
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -43,6 +52,23 @@
   <EditText
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
+      android:inputType="phone"
+      android:ems="10"
+      android:id="@+id/phone"
+      android:hint="Téléphone"/>
+
+  <TextView
+      android:text="Email incorrect"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/badMailTxt"
+      android:textSize="24sp"
+      android:textColor="#FF0101"
+      android:visibility="gone"/>
+
+  <EditText
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
       android:inputType="textPassword"
       android:ems="10"
       android:id="@+id/password"
@@ -56,9 +82,18 @@
       android:id="@+id/passwordBis"
       android:hint="Réécrivez le mot de passe"/>
 
+  <TextView
+      android:text="Réécrivez correctement le mot de passe"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/badPasswordTxt"
+      android:textSize="24sp"
+      android:textColor="#FF0000"
+      android:visibility="gone"/>
+
   <Button
       android:text="Créer le compte"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/createBtn"/>
+      android:id="@+id/createAccountBtn"/>
 </LinearLayout>

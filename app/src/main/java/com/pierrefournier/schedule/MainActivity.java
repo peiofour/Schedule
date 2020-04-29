@@ -16,8 +16,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        connexionBtn = findViewById(R.id.connectBtn);
-        createAccountBtn = findViewById(R.id.createAccountBtn);
+        connexionBtn = findViewById(R.id.connectMenuBtn);
+        createAccountBtn = findViewById(R.id.createAccountMenuBtn);
 
         connexionBtn.setOnClickListener(this);
         createAccountBtn.setOnClickListener(this);

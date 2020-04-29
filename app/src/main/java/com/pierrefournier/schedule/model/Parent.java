@@ -9,8 +9,8 @@ public class Parent extends User {
 
     private final List<Child> children;
 
-    public Parent(String firstName, String lastName, String pseudo, String password, String phone) {
-        super(firstName, lastName, pseudo, password, phone);
+    public Parent(String firstName, String lastName, String email, String password, String phone) {
+        super(firstName, lastName, email, password, phone);
         this.children = new ArrayList<Child>();
     }
 
