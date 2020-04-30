@@ -49,6 +49,15 @@
       android:id="@+id/email"
       android:hint="Email"/>
 
+  <TextView
+      android:text="Email incorrect"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/badMailTxt"
+      android:textSize="18sp"
+      android:textColor="#FF0101"
+      android:visibility="gone"/>
+
   <EditText
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -58,12 +67,12 @@
       android:hint="Téléphone"/>
 
   <TextView
-      android:text="Email incorrect"
+      android:text="Numéro de téléphone incorrect"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/badMailTxt"
-      android:textSize="24sp"
-      android:textColor="#FF0101"
+      android:id="@+id/badPhoneTxt"
+      android:textColor="#FA0000"
+      android:textSize="18sp"
       android:visibility="gone"/>
 
   <EditText
@@ -87,7 +96,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:id="@+id/badPasswordTxt"
-      android:textSize="24sp"
+      android:textSize="18sp"
       android:textColor="#FF0000"
       android:visibility="gone"/>
 

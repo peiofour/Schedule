@@ -21,7 +21,7 @@ public class CreateParentAccount extends AppCompatActivity implements View.OnCli
     TextView missInfo;
     TextView badMail;
     TextView badPassword;
-
+    TextView badPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,7 @@ public class CreateParentAccount extends AppCompatActivity implements View.OnCli
         missInfo = findViewById(R.id.missInfoTxt);
         badMail = findViewById(R.id.badMailTxt);
         badPassword = findViewById(R.id.badPasswordTxt);
+        badPhone = findViewById(R.id.badPhoneTxt);
 
         createAccountBtn.setOnClickListener(this);
     }
@@ -46,6 +47,11 @@ public class CreateParentAccount extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         if(v == createAccountBtn){
+
+            missInfo.setVisibility(View.GONE);
+            badMail.setVisibility(View.GONE);
+            badPassword.setVisibility(View.GONE);
+            badPhone.setVisibility(View.GONE);
 
             //Verify if there are all value in cases
             if(String.valueOf(name.getText()).replaceAll(" ", "").equals("") ||
@@ -65,7 +71,7 @@ public class CreateParentAccount extends AppCompatActivity implements View.OnCli
 
             //verify phone number
             else if(!String.valueOf(phone.getText()).matches("^(?:(?:\\+|00)33|0)\\s*[1-9](?:[\\s.-]*\\d{2}){4}$")){
-                System.out.println("TEST 5");
+                badPhone.setVisibility(View.VISIBLE);
             }
             //Verify that password and passwordBis matches
             else if(!String.valueOf(password.getText()).equals(String.valueOf(passwordBis.getText()))){
