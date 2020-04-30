@@ -18,13 +18,23 @@
       android:textSize="30sp"
       android:textStyle="bold"/>
 
+  <TextView
+      android:text="Remplir tous les champs"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/connectInfoMissing"
+      android:layout_marginTop="20dp"
+      android:layout_gravity="center"
+      android:visibility="gone"
+      android:textColor="#F60505"/>
+
   <EditText
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:inputType="textPersonName"
+      android:inputType="textEmailAddress"
       android:ems="10"
-      android:id="@+id/accountName"
-      android:hint="Nom de compte"
+      android:id="@+id/connectEmail"
+      android:hint="Email"
       android:textAlignment="center"
       android:layout_gravity="center_horizontal"
       android:layout_marginTop="20dp"/>
@@ -34,7 +44,7 @@
       android:layout_height="wrap_content"
       android:inputType="textPassword"
       android:ems="10"
-      android:id="@+id/password"
+      android:id="@+id/connectPassword"
       android:hint="Mot de passe"
       android:textAlignment="center"
       android:layout_gravity="center_horizontal"
