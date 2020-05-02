@@ -1,13 +1,22 @@
 package com.pierrefournier.schedule;
 
 import android.telephony.PhoneNumberUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.pierrefournier.schedule.model.Parent;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CreateParentAccount extends AppCompatActivity implements View.OnClickListener{
 
@@ -22,6 +31,8 @@ public class CreateParentAccount extends AppCompatActivity implements View.OnCli
     TextView badMail;
     TextView badPassword;
     TextView badPhone;
+
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +91,38 @@ public class CreateParentAccount extends AppCompatActivity implements View.OnCli
 
             //If all is ok, create parent account
             else{
+
                 Parent parent = new Parent(String.valueOf(surname.getText()), String.valueOf(name.getText()), String.valueOf(email.getText()),
                         String.valueOf(password.getText()), String.valueOf(phone.getText()));
+
+                db = FirebaseFirestore.getInstance();
+
+                Map<String, Object> nParent = new HashMap<>();
+                nParent.put("firstName", parent.getFirstName());
+                nParent.put("lastName", parent.getLastName());
+                nParent.put("email", parent.getEmail());
+                nParent.put("phone", parent.getPhone());
+                nParent.put("password", parent.getPassword());
+                nParent.put("isParent", true);
+
+                String TAG = "testFirebasesStore ";
+
+                db.collection("users")
+                        .add(parent)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                finish();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error adding document", e);
+                            }
+                        });
             }
         }
     }

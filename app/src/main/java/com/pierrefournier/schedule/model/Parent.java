@@ -11,7 +11,7 @@ public class Parent extends User {
 
     public Parent(String firstName, String lastName, String email, String password, String phone) {
         super(firstName, lastName, email, password, phone);
-        this.children = new ArrayList<Child>();
+        children = new ArrayList<Child>();
     }
 
     public List<Child> getChildren() {
