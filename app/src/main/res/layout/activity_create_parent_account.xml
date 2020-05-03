@@ -100,6 +100,15 @@
       android:textColor="#FF0000"
       android:visibility="gone"/>
 
+  <TextView
+      android:text="Compte mail déjà utilisé"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/mailUsedTxt"
+      android:textColor="#F60101"
+      tools:textSize="24sp"
+      android:visibility="gone"/>
+
   <Button
       android:text="Créer le compte"
       android:layout_width="match_parent"

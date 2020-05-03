@@ -1,22 +1,16 @@
 package com.pierrefournier.schedule;
 
-import android.telephony.PhoneNumberUtils;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.pierrefournier.schedule.model.Parent;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Objects;
 
 public class CreateParentAccount extends AppCompatActivity implements View.OnClickListener{
 
@@ -31,6 +25,7 @@ public class CreateParentAccount extends AppCompatActivity implements View.OnCli
     TextView badMail;
     TextView badPassword;
     TextView badPhone;
+    TextView mailUsed;
 
     FirebaseFirestore db;
 
@@ -50,6 +45,7 @@ public class CreateParentAccount extends AppCompatActivity implements View.OnCli
         badMail = findViewById(R.id.badMailTxt);
         badPassword = findViewById(R.id.badPasswordTxt);
         badPhone = findViewById(R.id.badPhoneTxt);
+        mailUsed = findViewById(R.id.mailUsedTxt);
 
         createAccountBtn.setOnClickListener(this);
     }
@@ -63,6 +59,7 @@ public class CreateParentAccount extends AppCompatActivity implements View.OnCli
             badMail.setVisibility(View.GONE);
             badPassword.setVisibility(View.GONE);
             badPhone.setVisibility(View.GONE);
+            mailUsed.setVisibility(View.GONE);
 
             //Verify if there are all value in cases
             if(String.valueOf(name.getText()).replaceAll(" ", "").equals("") ||
@@ -97,30 +94,29 @@ public class CreateParentAccount extends AppCompatActivity implements View.OnCli
 
                 db = FirebaseFirestore.getInstance();
 
-                Map<String, Object> nParent = new HashMap<>();
-                nParent.put("firstName", parent.getFirstName());
-                nParent.put("lastName", parent.getLastName());
-                nParent.put("email", parent.getEmail());
-                nParent.put("phone", parent.getPhone());
-                nParent.put("password", parent.getPassword());
-                nParent.put("isParent", true);
-
-                String TAG = "testFirebasesStore ";
-
                 db.collection("users")
-                        .add(parent)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        .whereEqualTo("email", parent.getEmail())
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if(task.isSuccessful()){
+                                Log.d("TAG Pass : ", "TEST 1 ");
 
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                finish();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
+                                if(Objects.requireNonNull(task.getResult()).size() == 0){
+                                    db.collection("users")
+                                            .add(parent)
+                                            .addOnSuccessListener(documentReference -> {
+                                                Log.d("Success log: ", "DocumentSnapshot added with ID: " + documentReference.getId());
+                                                finish();
+                                            })
+                                            .addOnFailureListener(e -> Log.w("Error log: ", "Error adding document", e));
+                                }
+                                else {
+                                    mailUsed.setVisibility(View.VISIBLE);
+                                    Log.d("TAG already exist : ", "Mail already used");
+                                }
+                            } else {
+                                Log.d("TAG error : ", "Error getting documents: ", task.getException());
+
                             }
                         });
             }
