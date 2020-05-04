@@ -99,20 +99,17 @@ public class CreateParentAccount extends AppCompatActivity implements View.OnCli
                         .get()
                         .addOnCompleteListener(task -> {
                             if(task.isSuccessful()){
-                                Log.d("TAG Pass : ", "TEST 1 ");
 
                                 if(Objects.requireNonNull(task.getResult()).size() == 0){
                                     db.collection("users")
                                             .add(parent)
                                             .addOnSuccessListener(documentReference -> {
-                                                Log.d("Success log: ", "DocumentSnapshot added with ID: " + documentReference.getId());
                                                 finish();
                                             })
                                             .addOnFailureListener(e -> Log.w("Error log: ", "Error adding document", e));
                                 }
                                 else {
                                     mailUsed.setVisibility(View.VISIBLE);
-                                    Log.d("TAG already exist : ", "Mail already used");
                                 }
                             } else {
                                 Log.d("TAG error : ", "Error getting documents: ", task.getException());
