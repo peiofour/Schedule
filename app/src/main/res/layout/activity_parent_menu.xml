@@ -5,12 +5,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ParentMenu">
+    tools:context=".ParentMenu"
+    android:orientation="vertical">
 
   <TextView
-      android:text="Bonjour Parent"
-      android:layout_width="wrap_content"
+      android:text="Menu Parent"
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:id="@+id/textView3"
+      android:id="@+id/parentMenuTxt"
+      android:textAlignment="center"
       android:textSize="24sp"/>
+
+  <Button
+      android:text="Créer un compte enfant"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/addChildBtn"
+      />
+
 </LinearLayout>
