@@ -75,7 +75,7 @@ public class Connexion extends AppCompatActivity implements View.OnClickListener
                                         String userID = task.getResult().getDocuments().get(0).getId();
                                         SharedPreferences prefs = getSharedPreferences("user", Context.MODE_PRIVATE);
                                         SharedPreferences.Editor editor = prefs.edit();
-                                        editor.putString("ID", userID);
+                                        editor.putString("userID", userID);
                                         editor.commit();
                                         finish();
                                     }

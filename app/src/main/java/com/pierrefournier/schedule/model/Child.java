@@ -6,7 +6,7 @@ public class Child extends User {
 
     protected Child(String firstName, String lastName, String pseudo, String password, String phone) {
 
-        super(firstName, lastName, pseudo, password, phone);
+        super(firstName, lastName, pseudo, password, phone, false);
         this.planning = new Planning();
     }
 }

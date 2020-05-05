@@ -7,13 +7,19 @@ public class User {
     private String email;
     private String password;
     private String phone;
+    private final Boolean isParent;
 
-    protected User(String firstName, String lastName, String email, String password, String phone) {
+    protected User(String firstName, String lastName, String email, String password, String phone, Boolean isParent) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.phone = phone;
+        this.isParent = isParent;
+    }
+
+    public Boolean getIsParent() {
+        return isParent;
     }
 
     public String getFirstName() {
