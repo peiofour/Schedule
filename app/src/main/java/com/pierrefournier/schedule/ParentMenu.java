@@ -15,6 +15,7 @@ import com.google.firebase.firestore.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ParentMenu extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,7 +35,7 @@ public class ParentMenu extends AppCompatActivity implements View.OnClickListene
                         List<DocumentReference> childArray = (List<DocumentReference>) document.get("children");
                         List<String> childrenId = new ArrayList<>();
 
-                        for(DocumentReference child : childArray){
+                        for(DocumentReference child : Objects.requireNonNull(childArray)){
                             childrenId.add(child.getId());
                         }
                         mAdapter = new ChildrenListAdapter(childrenId);
@@ -58,15 +59,12 @@ public class ParentMenu extends AppCompatActivity implements View.OnClickListene
         layoutManager = new LinearLayoutManager(this);
         childrenRecyclerView.setLayoutManager(layoutManager);
 
-        parentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-                if(e != null){
-                    Log.w("onEvent failed", e);
-                }
-                if(snapshot != null && snapshot.exists()){
-                    updateChildrenListAdapter();
-                }
+        parentReference.addSnapshotListener((snapshot, e) -> {
+            if(e != null){
+                Log.w("onEvent failed", e);
+            }
+            if(snapshot != null && snapshot.exists()){
+                updateChildrenListAdapter();
             }
         });
     }
