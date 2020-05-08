@@ -1,6 +1,5 @@
 package com.pierrefournier.schedule;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,38 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ChildrenListAdapter extends RecyclerView.Adapter<ChildrenListAdapter.childrenViewHolder> {
 
-    private final Database bdd = new Database();
-    private final ArrayList<String> childrenId;
+    private Database bdd;
+    private List<String> childrenId;
+
+    public ChildrenListAdapter(List<String> childrenId){
+        bdd = new Database();
+        this.childrenId = childrenId;
+    }
+
+    @NonNull
+    @Override
+    public childrenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.children_cell, parent, false);
+
+        return new childrenViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull childrenViewHolder holder, int position) {
+        String childID = childrenId.get(position);
+        holder.display(childID);
+    }
+
+    @Override
+    public int getItemCount() {
+        return childrenId.size();
+    }
+
 
     public class childrenViewHolder extends RecyclerView.ViewHolder{
 
@@ -34,7 +59,6 @@ public class ChildrenListAdapter extends RecyclerView.Adapter<ChildrenListAdapte
         }
 
         public void display(String childId){
-            //currentChildRef = childRef;
             bdd.getUserRef(childId)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -50,31 +74,4 @@ public class ChildrenListAdapter extends RecyclerView.Adapter<ChildrenListAdapte
                     });
         }
     }
-
-    public ChildrenListAdapter(ArrayList<String> childrenId){
-        this.childrenId = childrenId;
-    }
-
-    @NonNull
-    @Override
-    public childrenViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.children_cell, parent, false);
-
-        return new childrenViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull childrenViewHolder holder, int position) {
-        Log.d("Position ref", String.valueOf(position));
-        String childID = childrenId.get(position);
-        holder.display(childID);
-    }
-
-    @Override
-    public int getItemCount() {
-        return childrenId.size();
-    }
-
-
 }

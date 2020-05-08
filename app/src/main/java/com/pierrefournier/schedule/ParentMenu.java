@@ -6,12 +6,12 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,27 +20,25 @@ public class ParentMenu extends AppCompatActivity implements View.OnClickListene
 
     private Button addChildAccountBtn;
     private SharedPreferences prefs;
-    private Database bdd;
 
     private RecyclerView childrenRecyclerView;
     private ChildrenListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private DocumentReference parentReference;
 
-    private ArrayList<String> childrenId = new ArrayList<String>();
-
-    private void getChildrenId(){
-        bdd = new Database();
-        prefs = getSharedPreferences("user", Context.MODE_PRIVATE);
-        bdd.getUserRef(prefs.getString("userID", null))
-                .get()
+    private void updateChildrenListAdapter(){
+        parentReference.get()
                 .addOnCompleteListener(task -> {
                     DocumentSnapshot document = task.getResult();
                     if(document != null && document.exists()){
-                        ArrayList<DocumentReference> childArray = (ArrayList<DocumentReference>) document.get("children");
+                        List<DocumentReference> childArray = (List<DocumentReference>) document.get("children");
+                        List<String> childrenId = new ArrayList<>();
+
                         for(DocumentReference child : childArray){
                             childrenId.add(child.getId());
-                            Log.d("Child ID", child.getId());
                         }
+                        mAdapter = new ChildrenListAdapter(childrenId);
+                        childrenRecyclerView.setAdapter(mAdapter);
                     }
                 });
     }
@@ -50,16 +48,27 @@ public class ParentMenu extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parent_menu);
         addChildAccountBtn = findViewById(R.id.createChildAccountBtn);
+        childrenRecyclerView = findViewById(R.id.ChildrenRecyclerView);
         addChildAccountBtn.setOnClickListener(this);
 
-        childrenRecyclerView = findViewById(R.id.ChildrenRecyclerView);
+        prefs = getSharedPreferences("user", Context.MODE_PRIVATE);
+        Database bdd = new Database();
+        parentReference = bdd.getUserRef(prefs.getString("userID", null));
+
         layoutManager = new LinearLayoutManager(this);
         childrenRecyclerView.setLayoutManager(layoutManager);
 
-        getChildrenId();
-
-        mAdapter = new ChildrenListAdapter(childrenId);
-        childrenRecyclerView.setAdapter(mAdapter);
+        parentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
+                if(e != null){
+                    Log.w("onEvent failed", e);
+                }
+                if(snapshot != null && snapshot.exists()){
+                    updateChildrenListAdapter();
+                }
+            }
+        });
     }
 
     @Override
