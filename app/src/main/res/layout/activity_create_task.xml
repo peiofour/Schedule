@@ -9,7 +9,7 @@
     tools:context=".CreateTask">
 
   <EditText
-      android:id="@+id/taskName"
+      android:id="@+id/TaskNameCreate"
       android:inputType="textPersonName"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
       android:ems="10"/>
 
   <Spinner
-      android:id="@+id/taskType"
+      android:id="@+id/TaskTypeCreate"
       android:layout_width="268dp"
       android:layout_height="wrap_content"
       android:layout_gravity="center"
@@ -44,7 +44,7 @@
       android:layout_height="wrap_content"
       android:inputType="date"
       android:ems="10"
-      android:id="@+id/date"
+      android:id="@+id/DateTaskCreate"
       android:hint="Date"/>
 
   <LinearLayout
@@ -60,7 +60,7 @@
         android:layout_height="wrap_content"
         android:inputType="time"
         android:ems="10"
-        android:id="@+id/startTime"
+        android:id="@+id/StartHourTaskCreate"
         android:layout_weight="1"
         android:text="Début : "/>
 
@@ -69,7 +69,7 @@
         android:layout_height="wrap_content"
         android:inputType="time"
         android:ems="10"
-        android:id="@+id/endTime"
+        android:id="@+id/EndHourTaskCreate"
         android:layout_weight="1"
         tools:text="Fin :"/>
 
@@ -87,50 +87,64 @@
         android:text="L"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBox7"
-        android:layout_weight="1"/>
+        android:id="@+id/MondayCheckbox"
+        android:layout_weight="1"
+        android:transitionName="Monday"
+        android:onClick="onCheckboxClicked"/>
 
     <CheckBox
         android:text="M"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBox6"
-        android:layout_weight="1"/>
+        android:id="@+id/TuesdayCheckbox"
+        android:layout_weight="1"
+        android:transitionName="Tuesday"
+        android:onClick="onCheckboxClicked"/>
 
     <CheckBox
         android:text="M"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBox5"
-        android:layout_weight="1"/>
+        android:id="@+id/WednesdayCheckbox"
+        android:layout_weight="1"
+        android:transitionName="Wednesday"
+        android:onClick="onCheckboxClicked"/>
 
     <CheckBox
         android:text="J"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBox4"
-        android:layout_weight="1"/>
+        android:id="@+id/ThursdayCheckbox"
+        android:layout_weight="1"
+        android:transitionName="Thursday"
+        android:onClick="onCheckboxClicked"/>
 
     <CheckBox
         android:text="V"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBox3"
-        android:layout_weight="1"/>
+        android:id="@+id/FridayCheckbox"
+        android:layout_weight="1"
+        android:transitionName="Friday"
+        android:onClick="onCheckboxClicked"/>
 
     <CheckBox
         android:text="S"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBox2"
-        android:layout_weight="1"/>
+        android:id="@+id/SaturdayCheckbox"
+        android:layout_weight="1"
+        android:transitionName="Saturday"
+        android:onClick="onCheckboxClicked"/>
 
     <CheckBox
         android:text="D"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/checkBox"
-        android:layout_weight="1"/>
+        android:id="@+id/SundayCheckbox"
+        android:layout_weight="1"
+        android:transitionName="Sunday"
+        android:onClick="onCheckboxClicked"/>
   </LinearLayout>
 
   <LinearLayout
@@ -151,7 +165,7 @@
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/remindNb"
+        android:id="@+id/RemindNbSpinner"
         android:layout_weight="1"/>
 
     <TextView
@@ -164,7 +178,7 @@
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/remindInterval"
+        android:id="@+id/RemindIntervalSpinner"
         android:layout_weight="1"/>
   </LinearLayout>
 
@@ -174,15 +188,25 @@
       android:layout_height="wrap_content"
       android:inputType="textPersonName"
       android:ems="10"
-      android:id="@+id/comments"
+      android:id="@+id/CommentTaskCreate"
       android:hint="Commentaires"
       android:layout_marginBottom="20dp"/>
 
+  <TextView
+      android:text="Il manque des informations pour valider"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:id="@+id/WarningTaskCreateTextView"
+      tools:textSize="24sp"
+      android:textColor="#E53935"
+      android:textAlignment="center"
+      android:visibility="gone"/>
+
   <Button
-      android:text="Créer"
+      android:text="Créer la tâche"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:id="@+id/createTaskBtn"
+      android:id="@+id/CreateTaskBtn"
       android:layout_gravity="center"/>
 
 

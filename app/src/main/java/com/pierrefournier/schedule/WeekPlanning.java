@@ -1,6 +1,7 @@
 package com.pierrefournier.schedule;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Objects;
 
-public class WeekPlanning extends AppCompatActivity {
+public class WeekPlanning extends AppCompatActivity implements View.OnClickListener{
 
     private Button previousWeekBtn;
     private Button nextWeekBtn;
@@ -29,7 +30,12 @@ public class WeekPlanning extends AppCompatActivity {
 
     private Database bdd;
     private SharedPreferences prefs;
+    private String childID;
+    private String userID;
+    private Boolean isParent = false;
 
+    private String firstDayWeek;
+    private String lastDayWeek;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +47,15 @@ public class WeekPlanning extends AppCompatActivity {
         addTaskLayout = findViewById(R.id.AddTaskLayout);
         addTaskButton = findViewById(R.id.AddTaskButton);
 
+        previousWeekBtn.setOnClickListener(this);
+        nextWeekBtn.setOnClickListener(this);
+        addTaskButton.setOnClickListener(this);
+
         bdd = new Database();
         prefs = getSharedPreferences("user", Context.MODE_PRIVATE);
+        userID = prefs.getString("userID", null);
 
-        bdd.getUserRef(prefs.getString("userID", null))
+        bdd.getUserRef(userID)
                 .get()
                 .addOnCompleteListener(task -> {
                     if(task.isSuccessful()){
@@ -54,9 +65,21 @@ public class WeekPlanning extends AppCompatActivity {
                             if(documentSnapshot.getBoolean("isParent")){
                                 addTaskLayout.setVisibility(View.VISIBLE);
                                 addTaskButton.setClickable(true);
+                                childID = prefs.getString("childID", null);
+                                isParent = true;
                             }
                         }
                     }
                 });
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if(v == addTaskButton){
+            Intent intent = new Intent(this, CreateTask.class);
+            startActivity(intent);
+        }
     }
 }
