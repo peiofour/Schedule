@@ -3,19 +3,18 @@ package com.pierrefournier.schedule;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.firebase.firestore.*;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ParentMenu extends AppCompatActivity implements View.OnClickListener {
 
@@ -23,7 +22,7 @@ public class ParentMenu extends AppCompatActivity implements View.OnClickListene
     private SharedPreferences prefs;
 
     private RecyclerView childrenRecyclerView;
-    private ChildrenListAdapter mAdapter;
+    private ChildrenListAdapter childrenListAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private DocumentReference parentReference;
 
@@ -35,11 +34,11 @@ public class ParentMenu extends AppCompatActivity implements View.OnClickListene
                         List<DocumentReference> childArray = (List<DocumentReference>) document.get("children");
                         List<String> childrenId = new ArrayList<>();
 
-                        for(DocumentReference child : Objects.requireNonNull(childArray)){
+                        for(DocumentReference child : childArray){
                             childrenId.add(child.getId());
                         }
-                        mAdapter = new ChildrenListAdapter(childrenId);
-                        childrenRecyclerView.setAdapter(mAdapter);
+                        childrenListAdapter = new ChildrenListAdapter(childrenId);
+                        childrenRecyclerView.setAdapter(childrenListAdapter);
                     }
                 });
     }
