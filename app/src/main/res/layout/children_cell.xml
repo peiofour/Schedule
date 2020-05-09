@@ -9,7 +9,9 @@
               android:orientation="horizontal"
               android:backgroundTint="#AF20A2"
               android:background="#FFFFFF"
-              app:layout_constraintCircleRadius="2dp">
+              app:layout_constraintCircleRadius="2dp"
+              android:id="@+id/ChildrenCellLayout"
+              android:clickable="true">
 
   <TextView
       android:layout_width="wrap_content"

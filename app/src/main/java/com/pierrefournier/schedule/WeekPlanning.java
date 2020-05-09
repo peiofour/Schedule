@@ -6,14 +6,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.Objects;
 
 public class WeekPlanning extends AppCompatActivity {
 
@@ -25,6 +25,7 @@ public class WeekPlanning extends AppCompatActivity {
     private RecyclerView tasksRecyclerView;
 
     private DocumentReference childReference;
+    private Task<DocumentSnapshot> userDocSnapshot;
 
     private Database bdd;
     private SharedPreferences prefs;
@@ -52,6 +53,7 @@ public class WeekPlanning extends AppCompatActivity {
                         if(documentSnapshot.exists()){
                             if(documentSnapshot.getBoolean("isParent")){
                                 addTaskLayout.setVisibility(View.VISIBLE);
+                                addTaskButton.setClickable(true);
                             }
                         }
                     }

@@ -37,7 +37,7 @@ public class ParentMenu extends AppCompatActivity implements View.OnClickListene
                         for(DocumentReference child : childArray){
                             childrenId.add(child.getId());
                         }
-                        childrenListAdapter = new ChildrenListAdapter(childrenId);
+                        childrenListAdapter = new ChildrenListAdapter(childrenId, prefs, this);
                         childrenRecyclerView.setAdapter(childrenListAdapter);
                     }
                 });
