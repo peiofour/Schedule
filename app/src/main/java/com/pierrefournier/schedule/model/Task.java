@@ -6,20 +6,23 @@ public class Task {
 
     private String title;
     private String date;
-    private String hour;
-    private String duration;
+    private String startHour;
+    private String endHour;
     private String type;
     private Integer recalls;
+    private String interval;
     private String comment;
     private List<String> recurringDays;
 
-    public Task(String title, String date, String hour, String duration, String type, Integer recalls, String comment, List<String> recurringDays){
+    public Task(String title, String date, String startHour, String endHour, String type, Integer recalls, String interval, String comment,
+                List<String> recurringDays){
         this.title = title;
         this.date = date;
-        this.hour = hour;
-        this.duration = duration;
+        this.startHour = startHour;
+        this.endHour = endHour;
         this.type = type;
         this.recalls = recalls;
+        this.interval = interval;
         this.recurringDays = recurringDays;
         this.comment = comment;
     }
@@ -60,20 +63,20 @@ public class Task {
         this.date = date;
     }
 
-    public String getHour() {
-        return hour;
+    public String getStartHour() {
+        return startHour;
     }
 
-    public void setHour(String hour) {
-        this.hour = hour;
+    public void setStartHour(String startHour) {
+        this.startHour = startHour;
     }
 
-    public String getDuration() {
-        return duration;
+    public String getEndHour() {
+        return endHour;
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
+    public void setEndHour(String endHour) {
+        this.endHour = endHour;
     }
 
     public String getType() {
@@ -90,5 +93,13 @@ public class Task {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getInterval() {
+        return interval;
+    }
+
+    public void setInterval(String interval) {
+        this.interval = interval;
     }
 }

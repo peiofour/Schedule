@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.pierrefournier.schedule.model.Task;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHolder>{
@@ -53,7 +52,7 @@ public class TasksAdapter extends RecyclerView.Adapter<TasksAdapter.TasksViewHol
 
         public void display(Task task){
             dateView.setText(task.getDate());
-            hourView.setText(task.getHour());
+            hourView.setText(task.getStartHour());
             titleView.setText(task.getTitle());
         }
     }

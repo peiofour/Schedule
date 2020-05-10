@@ -3,10 +3,17 @@ package com.pierrefournier.schedule;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.widget.*;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.pierrefournier.schedule.model.Task;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -134,6 +141,10 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
                 if(v == startHourTextView){
                     startHourTextView.setText(hour + ":" + minutes);
                     startHour = String.valueOf(startHourTextView.getText());
+                    if(String.valueOf(endHourTextView.getText()).equals("")){
+                        endHourTextView.setText(hour + ":" + minutes);
+                        endHour = String.valueOf(endHourTextView.getText());
+                    }
                 }else if(v == endHourTextView){
                     endHourTextView.setText(hour + ":" + minutes);
                     endHour = String.valueOf(endHourTextView.getText());
@@ -152,7 +163,27 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
                     String.valueOf(endHourTextView.getText()).replaceAll(" ", "").equals("")){
                 warningTextView.setVisibility(View.VISIBLE);
             }
+            else{
+                Task task = new Task(String.valueOf(taskNameEditText.getText()),
+                        date,
+                        startHour,
+                        endHour,
+                        taskTypeSpinner.getSelectedItem().toString(),
+                        Integer.valueOf(remindNbSpinner.getSelectedItem().toString()),
+                        remindIntervalSpinner.getSelectedItem().toString(),
+                        commentEditText.getText().toString(),
+                        recurringDays);
+
+                Log.d("Task created", task.getTitle());
+
+                Database bdd = new Database();
+
+                DocumentReference childRef = bdd.getUserRef(childID);
+                childRef.update("taskList", FieldValue.arrayUnion(task));
+                finish();
+            }
         }
+
 
 
     }
