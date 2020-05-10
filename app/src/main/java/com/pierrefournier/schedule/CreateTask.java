@@ -1,15 +1,15 @@
 package com.pierrefournier.schedule;
 
+import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.view.View;
 import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.*;
 
 public class CreateTask extends AppCompatActivity implements View.OnClickListener{
 
@@ -25,6 +25,8 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
     private Button createTaskButton;
 
     private String childID;
+    private SimpleDateFormat df;
+
 
     private String taskType;
     private String date;
@@ -32,6 +34,13 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
     private String duration;
     private Integer recalls;
     private List<String> recurringDays;
+    private String day;
+    private String month;
+    private DatePickerDialog datePickerDialog;
+    private Calendar calendar;
+    private int currentMonth;
+    private int currentYear;
+    private int currentDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +59,11 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
         createTaskButton = findViewById(R.id.CreateTaskBtn);
         createTaskButton.setOnClickListener(this);
 
+        df = new SimpleDateFormat("dd-MM-yyyy");
+        Instant today = Instant.now();
+        dateEditText.setOnClickListener(this);
+        //dateEditText.setText(today.toString());
+
         childID = this.getSharedPreferences("user", Context.MODE_PRIVATE).getString("childID", null);
 
         List<String> taskTypeList = Arrays.asList("Vie quotidienne", "Scolaire", "Extrascolaire", "Ponctuelle", "Réveil", "Tâche butoire");
@@ -62,12 +76,13 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
         ArrayAdapter<String> remindNbListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, remindNbList);
         remindNbSpinner.setDropDownVerticalOffset(android.R.layout.simple_dropdown_item_1line);
         remindNbSpinner.setAdapter(remindNbListAdapter);
+        remindNbSpinner.setSelection(0);
 
         List<String> remindIntervalList = Arrays.asList("5min", "10min", "15min", "20min", "30min");
         ArrayAdapter<String> remindIntervalListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, remindIntervalList);
         remindIntervalSpinner.setDropDownVerticalOffset(android.R.layout.simple_dropdown_item_1line);
         remindIntervalSpinner.setAdapter(remindIntervalListAdapter);
-
+        remindIntervalSpinner.setSelection(0);
 
     }
 
@@ -82,6 +97,35 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
+        if(v == dateEditText){
+            calendar = Calendar.getInstance();
+            currentYear = calendar.get(Calendar.YEAR);
+            currentMonth = calendar.get(Calendar.MONTH);
+            currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+            datePickerDialog = new DatePickerDialog(this, (datepicker, selectedYear, selectedMonth, selectedDay) -> {
+                day = String.valueOf(selectedDay);
+                month = String.valueOf(selectedMonth + 1);
+                day = day.length() == 1 ? "0" + day : "" + selectedDay;
+                month = month.length() == 1 ? "0" + month : "" + selectedMonth;
+                dateEditText.setText(day + "/" + month + "/" + selectedYear);
 
+                date = selectedYear + "-" + month + "-" + day;
+            }, currentYear, currentMonth, currentDay);
+            datePickerDialog.setTitle("Choisir la date");
+            datePickerDialog.show();
+        }
+
+        if(v == createTaskButton){
+            warningTextView.setVisibility(View.GONE);
+
+            if(String.valueOf(taskNameEditText.getText()).replaceAll(" ", "").equals("") ||
+                    String.valueOf(dateEditText.getText()).replaceAll(" ", "").equals("") ||
+                    String.valueOf(startHourEditText.getText()).replaceAll(" ", "").equals("") ||
+                    String.valueOf(endHourEditText.getText()).replaceAll(" ", "").equals("")){
+                warningTextView.setVisibility(View.VISIBLE);
+            }
+
+
+        }
     }
 }

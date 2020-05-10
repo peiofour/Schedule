@@ -42,10 +42,11 @@
   <EditText
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:inputType="date"
+      android:inputType="date|none"
       android:ems="10"
       android:id="@+id/DateTaskCreate"
-      android:hint="Date"/>
+      android:hint="Date"
+      android:editable="false"/>
 
   <LinearLayout
       android:orientation="horizontal"
