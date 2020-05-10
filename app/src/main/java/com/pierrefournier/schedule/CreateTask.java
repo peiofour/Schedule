@@ -1,6 +1,7 @@
 package com.pierrefournier.schedule;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.view.View;
 import android.widget.*;
@@ -8,16 +9,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.*;
 
 public class CreateTask extends AppCompatActivity implements View.OnClickListener{
 
     private EditText taskNameEditText;
     private Spinner taskTypeSpinner;
-    private EditText dateEditText;
-    private EditText startHourEditText;
-    private EditText endHourEditText;
+    private TextView dateTextView;
+    private TextView startHourTextView;
+    private TextView endHourTextView;
     private Spinner remindNbSpinner;
     private Spinner remindIntervalSpinner;
     private EditText commentEditText;
@@ -41,6 +41,12 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
     private int currentMonth;
     private int currentYear;
     private int currentDay;
+    private int currentHour;
+    private int currentMinute;
+    private TimePickerDialog timePickerDialog;
+    private String minutes;
+    private String startHour;
+    private String endHour;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +55,9 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
 
         taskNameEditText = findViewById(R.id.TaskNameCreate);
         taskTypeSpinner = findViewById(R.id.TaskTypeCreate);
-        dateEditText = findViewById(R.id.DateTaskCreate);
-        startHourEditText = findViewById(R.id.StartHourTaskCreate);
-        endHourEditText = findViewById(R.id.EndHourTaskCreate);
+        dateTextView = findViewById(R.id.DateTaskCreate);
+        startHourTextView = findViewById(R.id.StartHourTaskCreate);
+        endHourTextView = findViewById(R.id.EndHourTaskCreate);
         remindNbSpinner = findViewById(R.id.RemindNbSpinner);
         remindIntervalSpinner = findViewById(R.id.RemindIntervalSpinner);
         commentEditText = findViewById(R.id.CommentTaskCreate);
@@ -60,9 +66,9 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
         createTaskButton.setOnClickListener(this);
 
         df = new SimpleDateFormat("dd-MM-yyyy");
-        Instant today = Instant.now();
-        dateEditText.setOnClickListener(this);
-        //dateEditText.setText(today.toString());
+        dateTextView.setOnClickListener(this);
+        startHourTextView.setOnClickListener(this);
+        endHourTextView.setOnClickListener(this);
 
         childID = this.getSharedPreferences("user", Context.MODE_PRIVATE).getString("childID", null);
 
@@ -72,7 +78,7 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
         taskTypeSpinner.setAdapter(taskTypeListAdapter);
         taskTypeSpinner.setSelection(0);
 
-        List<String> remindNbList = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
+        List<String> remindNbList = Arrays.asList("0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10");
         ArrayAdapter<String> remindNbListAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, remindNbList);
         remindNbSpinner.setDropDownVerticalOffset(android.R.layout.simple_dropdown_item_1line);
         remindNbSpinner.setAdapter(remindNbListAdapter);
@@ -83,6 +89,8 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
         remindIntervalSpinner.setDropDownVerticalOffset(android.R.layout.simple_dropdown_item_1line);
         remindIntervalSpinner.setAdapter(remindIntervalListAdapter);
         remindIntervalSpinner.setSelection(0);
+
+        recurringDays = new ArrayList<String>();
 
     }
 
@@ -97,7 +105,7 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        if(v == dateEditText){
+        if(v == dateTextView){
             calendar = Calendar.getInstance();
             currentYear = calendar.get(Calendar.YEAR);
             currentMonth = calendar.get(Calendar.MONTH);
@@ -107,7 +115,7 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
                 month = String.valueOf(selectedMonth + 1);
                 day = day.length() == 1 ? "0" + day : "" + selectedDay;
                 month = month.length() == 1 ? "0" + month : "" + selectedMonth;
-                dateEditText.setText(day + "/" + month + "/" + selectedYear);
+                dateTextView.setText(day + "/" + month + "/" + selectedYear);
 
                 date = selectedYear + "-" + month + "-" + day;
             }, currentYear, currentMonth, currentDay);
@@ -115,17 +123,37 @@ public class CreateTask extends AppCompatActivity implements View.OnClickListene
             datePickerDialog.show();
         }
 
+        if(v == startHourTextView || v == endHourTextView){
+            calendar = Calendar.getInstance();
+            currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+            currentMinute = calendar.get(Calendar.MINUTE);
+            timePickerDialog = new TimePickerDialog(CreateTask.this, (view, hourOfDay, minute) -> {
+                minutes = String.valueOf(minute).length() == 1 ? "0" + minute : String.valueOf(minute);
+                hour = String.valueOf(hourOfDay).length() == 1 ? "0" + hourOfDay : String.valueOf(hourOfDay);
+
+                if(v == startHourTextView){
+                    startHourTextView.setText(hour + ":" + minutes);
+                    startHour = String.valueOf(startHourTextView.getText());
+                }else if(v == endHourTextView){
+                    endHourTextView.setText(hour + ":" + minutes);
+                    endHour = String.valueOf(endHourTextView.getText());
+                }
+            }, currentHour, currentMinute, true);
+            timePickerDialog.setTitle("Choisir l'heure");
+            timePickerDialog.show();
+        }
+
         if(v == createTaskButton){
             warningTextView.setVisibility(View.GONE);
 
             if(String.valueOf(taskNameEditText.getText()).replaceAll(" ", "").equals("") ||
-                    String.valueOf(dateEditText.getText()).replaceAll(" ", "").equals("") ||
-                    String.valueOf(startHourEditText.getText()).replaceAll(" ", "").equals("") ||
-                    String.valueOf(endHourEditText.getText()).replaceAll(" ", "").equals("")){
+                    String.valueOf(dateTextView.getText()).replaceAll(" ", "").equals("") ||
+                    String.valueOf(startHourTextView.getText()).replaceAll(" ", "").equals("") ||
+                    String.valueOf(endHourTextView.getText()).replaceAll(" ", "").equals("")){
                 warningTextView.setVisibility(View.VISIBLE);
             }
-
-
         }
+
+
     }
 }
